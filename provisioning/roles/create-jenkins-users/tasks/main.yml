@@ -1,0 +1,8 @@
+---
+- name: Copy initilisation script
+  template:
+    src: templates/users.groovy.j2
+    dest: /var/lib/jenkins/init.groovy.d/0-users.groovy
+    owner: jenkins
+    group: jenkins
+    mode: '0640'

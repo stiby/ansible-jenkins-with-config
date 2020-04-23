@@ -28,6 +28,3 @@ else {
     instance.setAuthorizationStrategy(strategy)
     instance.save()
 }
-
-instance.createProjectFromXML("ansible-local-test",new FileInputStream("/tmp/ansible-local-test.config.xml"))
-instance.save()

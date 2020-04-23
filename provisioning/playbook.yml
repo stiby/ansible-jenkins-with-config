@@ -12,17 +12,18 @@
     - geerlingguy.ansible
     - geerlingguy.java
     - geerlingguy.jenkins
+    - create-jenkins-users
 
   tasks:
-    - name: Copy initilisation script
+    - name: Copy projects script
       template:
-        src: templates/init.groovy.j2
-        dest: /var/lib/jenkins/init.groovy.d/init.groovy
+        src: templates/projects.groovy.j2
+        dest: /var/lib/jenkins/init.groovy.d/projects.groovy
         owner: jenkins
         group: jenkins
         mode: '0640'
 
-    - name: Copy project
+    - name: Copy project configuration file
       copy:
         src: files/ansible-local-test.config.xml
         dest: /tmp/ansible-local-test.config.xml
@@ -30,7 +31,7 @@
         group: jenkins
         mode: '0640'
 
-    - name: Creates directory
+    - name: Creates directory for project
       file:
         path: /opt/ansible-for-devops
         state: directory

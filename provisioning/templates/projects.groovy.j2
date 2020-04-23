@@ -1,0 +1,7 @@
+#!groovy
+import hudson.security.*
+import jenkins.model.*
+import hudson.security.csrf.DefaultCrumbIssuer
+def instance = Jenkins.getInstance()
+instance.createProjectFromXML("ansible-local-test",new FileInputStream("/tmp/ansible-local-test.config.xml"))
+instance.save()
