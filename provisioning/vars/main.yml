@@ -1,0 +1,16 @@
+---
+ntp_timezone: Europe/London
+
+firewall_allowed_tcp_ports:
+  - "22"
+  - "25"
+  - "80"
+  - "443"
+  - "8080"
+
+jenkins_plugins:
+  - ansicolor
+  - git
+
+jenkins_admin_username: administrator
+jenkins_admin_password: administrator

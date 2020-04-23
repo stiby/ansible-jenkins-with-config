@@ -1,0 +1,44 @@
+---
+- hosts: jenkins
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - geerlingguy.firewall
+    - geerlingguy.ntp
+    - geerlingguy.git
+    - geerlingguy.ansible
+    - geerlingguy.java
+    - geerlingguy.jenkins
+
+  tasks:
+    - name: Copy initilisation script
+      template:
+        src: templates/init.groovy.j2
+        dest: /var/lib/jenkins/init.groovy.d/init.groovy
+        owner: jenkins
+        group: jenkins
+        mode: '0640'
+
+    - name: Copy project
+      copy:
+        src: files/ansible-local-test.config.xml
+        dest: /tmp/ansible-local-test.config.xml
+        owner: jenkins
+        group: jenkins
+        mode: '0640'
+
+    - name: Creates directory
+      file:
+        path: /opt/ansible-for-devops
+        state: directory
+
+    - name: Copy test project
+      copy:
+        src: files/ansible-local-test.main.yml
+        dest: /opt/ansible-for-devops/main.yml
+        owner: jenkins
+        group: jenkins
+        mode: '0640'
