@@ -1,0 +1,29 @@
+---
+- name: Copy projects script
+  template:
+    src: templates/projects.groovy.j2
+    dest: /var/lib/jenkins/init.groovy.d/projects.groovy
+    owner: jenkins
+    group: jenkins
+    mode: '0640'
+
+- name: Copy project configuration file
+  copy:
+    src: files/ansible-local-test.config.xml
+    dest: /tmp/ansible-local-test.config.xml
+    owner: jenkins
+    group: jenkins
+    mode: '0640'
+
+- name: Creates directory for project
+  file:
+    path: /opt/ansible-for-devops
+    state: directory
+
+- name: Copy test project
+  copy:
+    src: files/ansible-local-test.main.yml
+    dest: /opt/ansible-for-devops/main.yml
+    owner: jenkins
+    group: jenkins
+    mode: '0640'

@@ -10,18 +10,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provider :virtualbox do |v|
-    v.name = "jenkins"
     v.memory = 512
     v.cpus = 2
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--ioapic", "on"]
+    v.linked_clone = true
   end
 
-  config.vm.hostname = "jenkins"
-  config.vm.network :private_network, ip: "192.168.33.55"
+  # Set the name of the VM. See: http://stackoverflow.com/a/17864388/100134
+  config.vm.define "jenkins" do |jenkins|
+      jenkins.vm.hostname = "jenkins"
+      jenkins.vm.network :private_network, ip: "192.168.33.55"
+  end
 
   # Set the name of the VM. See: http://stackoverflow.com/a/17864388/100134
-  config.vm.define :jenkins do |jenkins|
+  config.vm.define "agent" do |agent|
+      agent.vm.hostname = "agent"
+      agent.vm.network :private_network, ip: "192.168.33.56"
   end
 
   # Ansible provisioner.
@@ -29,6 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "provisioning/playbook.yml"
     ansible.inventory_path = "provisioning/inventory"
+    ansible.limit = "all"
     ansible.become = true
   end
 

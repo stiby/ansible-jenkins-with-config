@@ -11,6 +11,7 @@ firewall_allowed_tcp_ports:
 jenkins_plugins:
   - ansicolor
   - git
+  - ssh-slaves
 
 jenkins_admin_username: administrator
 jenkins_admin_password: administrator
