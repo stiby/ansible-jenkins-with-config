@@ -1,0 +1,26 @@
+---
+- name: Create 'jenkins' group
+  group: name=jenkins state=present
+
+- name: Allow 'jenkins' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%jenkins'
+    line: '%jenkins ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: Add 'jenkins' user and add it to sudo
+  user:
+    name: jenkins
+    groups: jenkins
+    generate_ssh_key: yes
+    append: yes
+    createhome: yes
+    state: present
+
+- name: Set authorized key for user ubuntu copying it from current user
+  authorized_key:
+    user: jenkins
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"

@@ -20,22 +20,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Set the name of the VM. See: http://stackoverflow.com/a/17864388/100134
   config.vm.define "jenkins" do |jenkins|
       jenkins.vm.hostname = "jenkins"
+      jenkins.vm.network :forwarded_port, guest: 22, host: 2201, id: "ssh"
       jenkins.vm.network :private_network, ip: "192.168.33.55"
   end
 
   # Set the name of the VM. See: http://stackoverflow.com/a/17864388/100134
   config.vm.define "agent" do |agent|
       agent.vm.hostname = "agent"
+      agent.vm.network :forwarded_port, guest: 22, host: 2202, id: "ssh"
       agent.vm.network :private_network, ip: "192.168.33.56"
-  end
 
-  # Ansible provisioner.
-  config.vm.provision "ansible" do |ansible|
-    ansible.compatibility_mode = "2.0"
-    ansible.playbook = "provisioning/playbook.yml"
-    ansible.inventory_path = "provisioning/inventory"
-    ansible.limit = "all"
-    ansible.become = true
+      # Ansible provisioner.
+      config.vm.provision "ansible" do |ansible|
+          ansible.compatibility_mode = "2.0"
+          ansible.playbook = "provisioning/playbook.yml"
+          ansible.inventory_path = "provisioning/inventory"
+          ansible.force_remote_user = false
+          ansible.limit = "all"
+          ansible.become = true
+      end
   end
-
 end
