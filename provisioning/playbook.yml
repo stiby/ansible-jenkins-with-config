@@ -40,3 +40,7 @@
       authorized_key:
         user: jenkins
         key: "{{ hostvars['jenkins'].master_public_key.stdout }}"
+
+# Jenkins private key has to be stored in Jenkins Credentials
+# The client and server have to have their known_hosts updated
+# The node then registered using the credentials
