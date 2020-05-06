@@ -38,6 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.force_remote_user = false
           ansible.limit = "all"
           ansible.become = true
+          #ansible.verbose = "vvv"
       end
   end
 end

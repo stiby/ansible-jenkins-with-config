@@ -24,3 +24,8 @@
     user: jenkins
     state: present
     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+- name: retrieve jenkins public key
+  command: cat /home/jenkins/.ssh/id_rsa.pub
+  register: public_key
+  changed_when: false

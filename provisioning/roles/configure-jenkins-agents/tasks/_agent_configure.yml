@@ -1,0 +1,17 @@
+---
+- name: run ssh-keyscan to add agent to known_hosts
+  command: "ssh-keyscan {{ hostvars[item].ansible_host }}"
+  register: agent_key
+- name: tell the host about our servers it might want to ssh to
+  known_hosts:
+    path: /home/jenkins/.ssh/known_hosts
+    name: "{{ hostvars[item].ansible_host }}"
+    key: "{{ agent_key.stdout }}"
+    state: present
+- name: Copy initilisation script
+  template:
+    src: templates/agent.groovy.j2
+    dest: "/var/lib/jenkins/init.groovy.d/{{ hostvars[item].ansible_host }}-agent-config.groovy"
+    owner: jenkins
+    group: jenkins
+    mode: '0640'

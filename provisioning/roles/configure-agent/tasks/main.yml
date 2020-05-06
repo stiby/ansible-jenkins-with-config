@@ -1,0 +1,6 @@
+---
+- name: add master public key to slaves
+  authorized_key:
+    user: jenkins
+    key: "{{ hostvars['jenkins'].public_key.stdout }}"
+    state: present

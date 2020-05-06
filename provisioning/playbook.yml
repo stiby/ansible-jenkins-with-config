@@ -23,24 +23,14 @@
   roles:
     - geerlingguy.jenkins
     - configure-jenkins-users
+    - configure-jenkins-credentials
     - configure-jenkins-projects
-  tasks:
-    - name: retrieve jenkins public key
-      command: cat /home/jenkins/.ssh/id_rsa.pub
-      register: master_public_key
-      changed_when: false
+    - configure-jenkins-agents
 
 - hosts: agents
   gather_facts: yes
   remote_user: jenkins
   vars:
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
-  tasks:
-    - name: add master public key to slaves
-      authorized_key:
-        user: jenkins
-        key: "{{ hostvars['jenkins'].master_public_key.stdout }}"
-
-# Jenkins private key has to be stored in Jenkins Credentials
-# The client and server have to have their known_hosts updated
-# The node then registered using the credentials
+  roles:
+    - configure-agent

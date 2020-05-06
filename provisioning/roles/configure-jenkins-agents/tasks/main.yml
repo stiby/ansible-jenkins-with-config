@@ -1,0 +1,4 @@
+---
+- name: Add agents
+  include: _agent_configure.yml
+  with_items: "{{ groups['agents'] }}"
